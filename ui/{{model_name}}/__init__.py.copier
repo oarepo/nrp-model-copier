@@ -1,0 +1,38 @@
+from oarepo_ui.resources import BabelComponent
+from oarepo_ui.resources.config import RecordsUIResourceConfig
+from oarepo_ui.resources.resource import RecordsUIResource
+
+
+class {{resource_config}}(RecordsUIResourceConfig):
+    template_folder = "templates"
+    url_prefix = "/{{endpoint}}"
+    blueprint_name = "{{model_name}}"
+    ui_serializer_class = "{{ui_serializer_class}}"
+    api_service = "{{api_service}}"
+
+    components = [BabelComponent]
+    try:
+        from oarepo_vocabularies.ui.resources.components import (
+            DepositVocabularyOptionsComponent,
+        )
+        components.append(DepositVocabularyOptionsComponent)
+    except ImportError:
+        pass
+
+    application_id="{{model_name}}"
+
+    templates = {
+        "detail": "{{model_name}}.Detail",
+        "search": "{{model_name}}.Search",
+        "edit": "{{model_name}}.Deposit",
+        "create":"{{model_name}}.Deposit",
+    }
+
+
+class {{resource}}(RecordsUIResource):
+    pass
+
+
+def create_blueprint(app):
+    """Register blueprint for this resource."""
+    return {{resource}}({{resource_config}}()).as_blueprint()

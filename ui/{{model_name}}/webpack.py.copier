@@ -1,0 +1,18 @@
+from invenio_assets.webpack import WebpackThemeBundle
+
+theme = WebpackThemeBundle(
+    __name__,
+    ".",
+    default="semantic-ui",
+    themes={
+        "semantic-ui": dict(
+            entry={
+                "{{model_name}}_search": "./js/{{model_name}}/search/index.js",
+                "{{model_name}}_deposit_form": "./js/{{model_name}}/forms/index.js",
+            },
+            dependencies={},
+            devDependencies={},
+            aliases={},
+        )
+    },
+)

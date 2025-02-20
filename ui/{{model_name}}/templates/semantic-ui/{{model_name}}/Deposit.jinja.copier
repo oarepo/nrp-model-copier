@@ -1,0 +1,8 @@
+{% raw %}{#def record, form_config, data, extra_context, ui_links #}
+{% extends "oarepo_ui/form.html" %}
+
+{%- block javascript %}
+    {{ super() }}
+    {{ webpack['{% endraw %}{{model_name}}{% raw %}_deposit_form.js'] }}
+{%- endblock %}
+{% endraw %}

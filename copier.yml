@@ -1,0 +1,64 @@
+model_name:
+  type: str
+  help: Short name of the model
+  default: datasets
+  when: false
+
+model_human_name:
+  type: str
+  help: Human readable name of the model
+  default: Datasets
+
+model_description:
+  type: str
+  multiline: true
+  help: Description of the model
+  default: A generic dataset model
+
+endpoint:
+  type: str
+  default: "{{ model_name|slugify }}"
+  when: false
+
+languages:
+  type: str
+  default: ""
+  help: "Comma separated list of languages"
+  when: false
+
+resource_config:
+  type: str
+  default: "{{ model_name|to_python_class }}UIResourceConfig"
+  help: "Resource configuration"
+  when: false
+
+ui_serializer_class:
+  type: str
+  default: "{{model_name}}.resources.records.ui.{{model_name|to_python_class}}UIJSONSerializer"
+  help: "UI Serializer class"
+  when: false
+
+api_service:
+  type: str
+  default: "{{model_name|slugify}}"
+  help: "API service name"
+  when: false
+
+resource:
+  type: str
+  default: "{{ model_name|to_python_class }}UIResource"
+  help: "Resource implementation"
+  when: false
+
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - extensions/slugify.py:SlugifyExtension
+  - extensions/to_python_class.py:ToPythonClassExtension
+
+_templates_suffix: .copier
+_exclude:
+  - extensions
+  - copier.yml
+  - .mypy_cache
+  - .gitignore
+_answers_file: ".copier-answers-{{model_name}}.yml"

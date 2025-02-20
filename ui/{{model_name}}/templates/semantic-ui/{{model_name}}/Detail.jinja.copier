@@ -1,0 +1,22 @@
+{% raw %}{% extends "oarepo_ui/detail.html" %}
+{#
+
+Variables:
+
+d: a UI serialization of the record
+api_record: an API version of the record
+
+#}
+
+{%- block head_links %}
+{{ super() }}
+{%- endblock %}
+
+{% block record_main_content %}
+    {# Place the main content here #}
+{% endblock %}
+
+{% block record_sidebar %}
+    <Sidebar d={d} />
+{% endblock record_sidebar %}
+{% endraw %}

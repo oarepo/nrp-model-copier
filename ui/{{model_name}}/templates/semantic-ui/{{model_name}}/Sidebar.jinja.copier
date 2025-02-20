@@ -1,0 +1,4 @@
+{% raw %}
+{#def d, api_record #}
+{# place the sidebar content in here #}
+{% endraw %}
