@@ -3,13 +3,10 @@ import PropTypes from "prop-types";
 import _get from "lodash/get";
 import _join from "lodash/join";
 import { Grid, Item, Label } from "semantic-ui-react";
-import { withState } from "react-searchkit";
 import { i18next } from "@translations/i18next";
 
 export const ResultsListItem = ({
-    currentQueryState,
     result,
-    appName,
     ...rest
 }) => {
     const accessRights = _get(result, "access_status", null);
@@ -77,34 +74,7 @@ export const ResultsListItem = ({
 };
 
 ResultsListItem.propTypes = {
-    currentQueryState: PropTypes.object,
-    result: PropTypes.object.isRequired,
-    appName: PropTypes.string,
-};
-
-ResultsListItem.defaultProps = {
-    currentQueryState: null,
-    appName: "",
-};
-
-const ResultsListItemWithState = withState(
-    ({ currentQueryState, updateQueryState, result, appName }) => (
-        <ResultsListItem
-            currentQueryState={currentQueryState}
-            updateQueryState={updateQueryState}
-            result={result}
-            appName={appName}
-        />
-    )
-);
-
-export default ResultsListItemWithState;
-
-ResultsListItemWithState.propTypes = {
-    currentQueryState: PropTypes.object,
     result: PropTypes.object.isRequired,
 };
 
-ResultsListItemWithState.defaultProps = {
-    currentQueryState: null,
-};
+export default ResultsListItem;
