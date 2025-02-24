@@ -12,7 +12,9 @@ theme = WebpackThemeBundle(
             },
             dependencies={},
             devDependencies={},
-            aliases={},
+            aliases={
+                "@js/{{model_name}}": "./js/{{model_name}}"
+            },
         )
     },
 )

@@ -1,3 +1,6 @@
 properties:
   title:
     type: fulltext+keyword
+  languages[]:
+    type: vocabulary
+    vocabulary-type: languages

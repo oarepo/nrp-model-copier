@@ -1,7 +1,16 @@
 from oarepo_ui.resources import BabelComponent
+from oarepo_ui.resources.components import (
+    AllowedCommunitiesComponent,
+    AllowedHtmlTagsComponent,
+    EmptyRecordAccessComponent,
+    FilesComponent,
+    FilesLockedComponent,
+    RecordRestrictionComponent,
+    PermissionsComponent,
+)
+from oarepo_ui.resources.components.custom_fields import CustomFieldsComponent
 from oarepo_ui.resources.config import RecordsUIResourceConfig
 from oarepo_ui.resources.resource import RecordsUIResource
-
 
 class {{resource_config}}(RecordsUIResourceConfig):
     template_folder = "templates"
@@ -10,7 +19,18 @@ class {{resource_config}}(RecordsUIResourceConfig):
     ui_serializer_class = "{{ui_serializer_class}}"
     api_service = "{{api_service}}"
 
-    components = [BabelComponent]
+    components = [
+        AllowedHtmlTagsComponent,
+        BabelComponent,
+        PermissionsComponent,
+        FilesComponent,
+        AllowedCommunitiesComponent,
+        CustomFieldsComponent,
+        RecordRestrictionComponent,
+        EmptyRecordAccessComponent,
+        FilesLockedComponent,
+    ]
+    
     try:
         from oarepo_vocabularies.ui.resources.components import (
             DepositVocabularyOptionsComponent,
@@ -19,20 +39,31 @@ class {{resource_config}}(RecordsUIResourceConfig):
     except ImportError:
         pass
 
-    application_id="{{model_name}}"
+    application_id = "{{model_name}}"
 
     templates = {
         "detail": "{{model_name}}.Detail",
         "search": "{{model_name}}.Search",
         "edit": "{{model_name}}.Deposit",
-        "create":"{{model_name}}.Deposit",
+        "create": "{{model_name}}.Deposit",
     }
 
 
 class {{resource}}(RecordsUIResource):
     pass
 
+def init_menu():
+    """Initialize menu before first request."""
+    current_menu.submenu("plus.create_{{model_name}}").register(
+        "{{model_name}}.create",
+        _("New {{model_human_name}}"),
+        order=1,
+        visible_when=can_view_deposit_page,
+    )
 
 def create_blueprint(app):
     """Register blueprint for this resource."""
-    return {{resource}}({{resource_config}}()).as_blueprint()
+    blueprint = {{resource}}({{resource_config}}()).as_blueprint()
+    blueprint.before_app_first_request(init_menu)
+    return blueprint
+
