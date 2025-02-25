@@ -8,7 +8,7 @@ import {
     serializeErrors,
     AccessRightField,
     useFormConfig,
-} from "@js/oarepo_ui";
+} from "@js/oarepo_ui/forms";
 import { i18next } from "@translations/i18next";
 import { SelectedCommunity } from "@js/communities_components/CommunitySelector/SelectedCommunity";
 import { RecordRequests } from "@js/oarepo_requests/components";
@@ -99,7 +99,7 @@ const FormActionsContainer = () => {
                 </Card.Content>
             </Card>
             <AccessRightField
-                label={i18next.t("metadata/accessRights.label")}
+                label={i18next.t("Access rights")}
                 record={values}
                 labelIcon="shield"
                 fieldPath="access"

@@ -1,4 +1,6 @@
-{% raw %}{% extends "oarepo_ui/detail.html" %}
+{% raw %}
+{#def  d, record, extra_context, is_preview #}
+{% extends "oarepo_ui/detail.html" %}
 {#
 
 Variables:
@@ -17,6 +19,12 @@ api_record: an API version of the record
 {% endblock %}
 
 {% block record_sidebar %}
-    <Sidebar d={d} />
+    <Sidebar  record={record} is_preview={is_preview} extra_context={extra_context} />
 {% endblock record_sidebar %}
+
+
+{%- block javascript %}
+{{ super() }}
+{{ webpack['oarepo_requests_ui_record_requests.js']}}
+{%- endblock %}
 {% endraw %}
