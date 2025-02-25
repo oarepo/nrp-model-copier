@@ -62,5 +62,6 @@ _exclude:
   - .mypy_cache
   - .gitignore
   - README.md
+  - .git
 
 _answers_file: ".copier-answers-{{model_name}}.yml"
