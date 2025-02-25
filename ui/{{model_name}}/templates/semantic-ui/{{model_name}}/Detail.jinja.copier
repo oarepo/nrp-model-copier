@@ -16,6 +16,7 @@ api_record: an API version of the record
 
 {% block record_main_content %}
     <DetailMetadata d={d.metadata} />
+    <FilesViewer files={extra_context.files} />
 {% endblock %}
 
 {% block record_sidebar %}
