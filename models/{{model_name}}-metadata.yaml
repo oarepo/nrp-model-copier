@@ -4,3 +4,7 @@ properties:
   languages[]:
     type: vocabulary
     vocabulary-type: languages
+
+  # note: the version is needed if you use the default publish/new version actions
+  version:
+    type: keyword
