@@ -36,17 +36,19 @@ export const ResultsListItem = ({
                             <Item.Meta>
                                 <Grid columns={1}>
                                     <Grid.Column>
+                                    {languages.length > 0 && (
                                         <Grid.Row className="ui separated">
                                             <span
-                                                aria-label={i18next.t("Languages")}
-                                                title={i18next.t("Languages")}
+                                            aria-label={i18next.t("Languages")}
+                                            title={i18next.t("Languages")}
                                             >
-                                                {_join(
-                                                    languages.map((l) => l.title),
-                                                    ", "
-                                                )}
+                                            {_join(
+                                                languages.map((l) => l.title),
+                                                ", "
+                                            )}
                                             </span>
                                         </Grid.Row>
+                                    )}
                                     </Grid.Column>
                                 </Grid>
                             </Item.Meta>
