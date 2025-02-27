@@ -12,6 +12,7 @@ from oarepo_ui.resources.components.custom_fields import CustomFieldsComponent
 from oarepo_ui.resources.config import RecordsUIResourceConfig
 from oarepo_ui.resources.resource import RecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
+from oarepo_ui.ui.components import UIComponent
 from flask_menu import current_menu
 from oarepo_runtime.i18n import lazy_gettext as _
 
@@ -21,6 +22,12 @@ class {{resource_config}}(RecordsUIResourceConfig):
     blueprint_name = "{{model_name}}"
     ui_serializer_class = "{{ui_serializer_class}}"
     api_service = "{{api_service}}"
+
+    search_component = UIComponent(
+        "{{model_name|title}}ResultsListItem",
+        "@js/{{model_name}}/search/ResultsListItem",
+        "default"
+    )
 
     components = [
         AllowedHtmlTagsComponent,
