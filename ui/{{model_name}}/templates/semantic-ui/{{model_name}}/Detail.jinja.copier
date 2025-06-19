@@ -1,5 +1,5 @@
 {% raw %}
-{#def  d, record, extra_context, is_preview #}
+{#def  d, record, extra_context, is_preview, embedded #}
 {% extends "oarepo_ui/detail.html" %}
 {#
 
@@ -26,6 +26,8 @@ api_record: an API version of the record
 
 {%- block javascript %}
 {{ super() }}
+{% if not embedded %}
 {{ webpack['oarepo_requests_ui_record_requests.js']}}
+{% endif %}
+{{ webpack['copy_to_clipboard.js']}}
 {%- endblock %}
-{% endraw %}
