@@ -1,6 +1,6 @@
 from oarepo_ui.resources import BabelComponent
 from oarepo_ui.resources.components import (
-    AllowedCommunitiesComponent,
+    # AllowedCommunitiesComponent,
     AllowedHtmlTagsComponent,
     EmptyRecordAccessComponent,
     FilesComponent,
@@ -9,19 +9,18 @@ from oarepo_ui.resources.components import (
     PermissionsComponent,
 )
 from oarepo_ui.resources.components.custom_fields import CustomFieldsComponent
-from oarepo_ui.resources.config import RecordsUIResourceConfig
-from oarepo_ui.resources.resource import RecordsUIResource
+from oarepo_ui.resources.records.config import RecordsUIResourceConfig
+from oarepo_ui.resources.records.resource import RecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
 from oarepo_ui.ui.components import UIComponent
 from flask_menu import current_menu
-from oarepo_runtime.i18n import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 
 class {{resource_config}}(RecordsUIResourceConfig):
     template_folder = "templates"
     url_prefix = "/{{endpoint}}"
     blueprint_name = "{{model_name}}"
-    ui_serializer_class = "{{ui_serializer_class}}"
-    api_service = "{{api_service}}"
+    model_name = "{{model_name}}"
 
     search_component = UIComponent(
         "{{model_name|title}}ResultsListItem",
@@ -34,7 +33,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
         BabelComponent,
         PermissionsComponent,
         FilesComponent,
-        AllowedCommunitiesComponent,
+        # AllowedCommunitiesComponent,
         CustomFieldsComponent,
         RecordRestrictionComponent,
         EmptyRecordAccessComponent,
@@ -62,18 +61,19 @@ class {{resource_config}}(RecordsUIResourceConfig):
 class {{resource}}(RecordsUIResource):
     pass
 
-def init_menu():
+def init_menu(app):
     """Initialize menu before first request."""
-    current_menu.submenu("plus.create_{{model_name}}").register(
-        "{{model_name}}.create",
-        _("New {{model_human_name}}"),
-        order=1,
-        visible_when=can_view_deposit_page,
-    )
+    with app.app_context():
+        current_menu.submenu("plus.create_{{model_name}}").register(
+            "{{model_name}}.create",
+            _("New {{model_human_name}}"),
+            order=1,
+            visible_when=can_view_deposit_page,
+        )
 
 def create_blueprint(app):
     """Register blueprint for this resource."""
     blueprint = {{resource}}({{resource_config}}()).as_blueprint()
-    blueprint.before_app_first_request(init_menu)
     return blueprint
 
+# TODO: register init_menu to finalize_app similarly blueprints & webpack is registered
