@@ -1,0 +1,13 @@
+"""Model for {{model_name}}.
+
+This package contains the model definition for {{model_name}}.
+To change model's metadata, edit the metadata.yaml file.
+To change presets, add serialization/deserialization formats
+and similar operations please see the model.py file.
+"""
+
+from __future__ import annotations
+
+from .model import {{model_name}}_model
+
+__all__ = ( "{{model_name}}_model", )

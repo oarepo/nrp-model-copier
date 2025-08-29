@@ -1,0 +1,26 @@
+from __future__ import annotations
+
+from invenio_i18n import lazy_gettext as _
+from oarepo_model.api import model
+from oarepo_model.presets.drafts import drafts_presets
+from oarepo_model.presets.rdm import rdm_presets
+from oarepo_model.presets.records_resources import records_resources_presets
+from oarepo_model.datatypes.registry import from_yaml
+
+datasets = model(
+    "{{model_name}}",
+    version="1.0.0",
+    presets=[records_resources_presets, drafts_presets, rdm_presets],
+    types=[
+        from_yaml("metadata.yaml", __file__)
+    ],
+    metadata_type="Metadata",
+    customizations=[
+        # Add your customizations here, such as custom exports and class mixins. 
+        # The list of available extensions is at https://github.com/oarepo/oarepo-model.
+        # If you do not find a customization that suits your needs or need a
+        # help with using customizations, please contact us at support@cesnet.cz and
+        # specify the keyword "Invenio repository development" inside the subject or
+        # mail body of the request.
+    ],
+)

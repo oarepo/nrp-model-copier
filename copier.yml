@@ -7,7 +7,7 @@ model_name:
 model_human_name:
   type: str
   help: Human readable name of the model
-  default: Datasets
+  default: "{{model_name|replace('_', '-')|title}}"
 
 model_description:
   type: str
@@ -32,18 +32,6 @@ resource_config:
   help: "Resource configuration"
   when: false
 
-ui_serializer_class:
-  type: str
-  default: "{{model_name}}.resources.records.ui.{{model_name|to_python_class}}UIJSONSerializer"
-  help: "UI Serializer class"
-  when: false
-
-api_service:
-  type: str
-  default: "{{model_name|slugify}}"
-  help: "API service name"
-  when: false
-
 resource:
   type: str
   default: "{{ model_name|to_python_class }}UIResource"
@@ -56,12 +44,14 @@ _jinja_extensions:
   - extensions/to_python_class.py:ToPythonClassExtension
 
 _templates_suffix: .copier
-_exclude:
-  - extensions
-  - copier.yml
-  - .mypy_cache
-  - .gitignore
-  - README.md
-  - .git
 
-_answers_file: ".copier-answers-{{model_name}}.yml"
+_subdirectory: template
+
+_answers_file: "{{model_name}}/.copier-answers.yml"
+
+_tasks:
+  - command: 
+    - "{{ _copier_python }}"
+    - "{{ _copier_conf.template.local_abspath }}/extensions/register_to_pyproject.py"
+    - "{{model_name}}"
+    when: "{{ _copier_operation == 'copy' }}"
