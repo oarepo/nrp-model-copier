@@ -53,9 +53,8 @@ class PyProject:
         return target_array
 
     def add_top_level_module(self, module_name):
-        top_level_modules = self.pyproject_data["tool.uv.build-backend"].setdefault(
-            "module-name", []
-        )
+        build_backend = self.pyproject_data["tool"]["uv"]["build-backend"]
+        top_level_modules = build_backend.setdefault("module-name", [])
 
         if module_name not in top_level_modules:
             top_level_modules.append(module_name)
