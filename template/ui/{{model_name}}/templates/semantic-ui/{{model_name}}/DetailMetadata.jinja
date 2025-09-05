@@ -1,4 +1,5 @@
 {# def d, level=0 #}
 <ITable>
-  <ITableField d={{d.title}} level={{level}}/>
+  {# TODO: no ui data passed through d yet #}
+  {{d.title._api_data}}
 </ITable>

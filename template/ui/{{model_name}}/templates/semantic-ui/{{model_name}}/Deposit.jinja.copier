@@ -3,7 +3,7 @@
 
 {%- block javascript %}
     {{ super() }}
-    {{ webpack['datasets_deposit_form.js'] }}
+    {{ webpack['{% endraw %}{{model_name}}{% raw %}_deposit_form.js'] }}
 {%- endblock %}
 
 
