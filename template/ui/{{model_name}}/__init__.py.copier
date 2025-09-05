@@ -19,7 +19,7 @@ from invenio_i18n import lazy_gettext as _
 class {{resource_config}}(RecordsUIResourceConfig):
     template_folder = "templates"
     url_prefix = "/{{endpoint}}"
-    blueprint_name = "{{model_name}}"
+    blueprint_name = "{{model_name}}_ui"
     model_name = "{{model_name}}"
 
     search_component = UIComponent(
