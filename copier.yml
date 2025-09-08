@@ -55,3 +55,8 @@ _tasks:
     - "{{ _copier_conf.src_path }}/extensions/register_to_pyproject.py"
     - "{{model_name}}"
     when: "{{ _copier_operation == 'copy' }}"
+  - command: 
+    - "{{ _copier_python }}"
+    - "{{ _copier_conf.src_path }}/extensions/register_to_invenio_cfg.py"
+    - "{{model_name}}"
+    when: "{{ _copier_operation == 'copy' }}"
