@@ -5,6 +5,7 @@ from oarepo_ui.resources.components import (
     EmptyRecordAccessComponent,
     FilesComponent,
     FilesLockedComponent,
+    FilesQuotaAndTransferComponent,
     RecordRestrictionComponent,
     PermissionsComponent,
 )
@@ -38,6 +39,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
         RecordRestrictionComponent,
         EmptyRecordAccessComponent,
         FilesLockedComponent,
+        FilesQuotaAndTransferComponent,
     ]
     
     try:
