@@ -1,5 +1,8 @@
+{% raw %}
 {# def d, level=0 #}
 <ITable>
-  {# TODO: no ui data passed through d yet #}
-  {{d.title._api_data}}
+  <IField d={{d.title}}>
+    <h1 class="ui header">{{ui_value(d.title)}}</h1>
+  </IField>
 </ITable>
+{% endraw %}
