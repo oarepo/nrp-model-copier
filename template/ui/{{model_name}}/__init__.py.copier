@@ -13,12 +13,9 @@ from oarepo_ui.resources.components.custom_fields import CustomFieldsComponent
 from oarepo_ui.resources.records.config import RecordsUIResourceConfig
 from oarepo_ui.resources.records.resource import RecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
-from oarepo_ui.ui.components import UIComponent
 from flask_menu import current_menu
 from invenio_i18n import lazy_gettext as _
-from oarepo_ui.overrides import (
-    UIComponent,
-)
+from oarepo_ui.overrides import UIComponent
 from oarepo_ui.overrides.components import UIComponentImportMode
 from oarepo_ui.proxies import current_oarepo_ui
 
@@ -98,7 +95,7 @@ def init_menu(app):
             visible_when=can_view_deposit_page,
         )
 
-def finalize_app(app);
+def finalize_app(app):
     """Finalize app"""
     init_menu(app)
     ui_overrides(app)
