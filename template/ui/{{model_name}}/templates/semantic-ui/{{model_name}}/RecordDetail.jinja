@@ -1,0 +1,22 @@
+{#def
+  record,
+  record_ui,
+  files,
+  media_files,
+  permissions,
+  is_preview,
+  include_deleted,
+  is_draft,
+  community,
+  community_ui,
+  user_avatar,
+  record_owner_id,
+  d
+#}
+{% extends "oarepo_ui/record_detail.html" %}
+{%- block page_banners -%}
+  {% include "datasets/record_detail/banners.html" %}
+{%- endblock page_banners -%}
+{%- block page_main -%}
+  {% include "datasets/record_detail/main.html" %}
+{%- endblock page_main -%}

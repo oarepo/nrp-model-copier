@@ -59,4 +59,5 @@ _tasks:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_invenio_cfg.py"
     - "{{model_name}}"
+    - "{{endpoint}}"
     when: "{{ _copier_operation == 'copy' }}"

@@ -1,7 +1,7 @@
 import sys
 
 
-def register_model_to_invenio_cfg(model_name):
+def register_model_to_invenio_cfg(model_name, endpoint):
 
     invenio_cfg_path = "invenio.cfg"
     model_registration = f"""
@@ -9,6 +9,7 @@ def register_model_to_invenio_cfg(model_name):
 from {model_name} import {model_name}_model
 
 {model_name}_model.register()
+DASHBOARD_RECORD_CREATE_URL = "/{endpoint}/uploads/new"
 """
 
     with open(invenio_cfg_path, 'a') as invenio_cfg:
@@ -16,4 +17,4 @@ from {model_name} import {model_name}_model
 
 
 if __name__ == "__main__":
-    register_model_to_invenio_cfg(sys.argv[1])
+    register_model_to_invenio_cfg(sys.argv[1], sys.argv[2])

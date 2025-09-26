@@ -1,0 +1,40 @@
+{% extends "oarepo_ui/record_detail/main.html" %}
+{# TODO: Uncomment & override parts of
+   record detail page here if you wish
+   to hide or customize look of certain sections.
+#}
+
+{%- set d = d.metadata -%}
+
+{# {%- block record_body -%} #}
+{#     {%- block record_header -%} #}
+{#     {%- block record_header_button -%} #}
+{#     {%- endblock record_header_button -%} #}
+{#     {%- block record_header_info -%} #}
+{#     {%- endblock record_header_info -%} #}
+{#     {%- endblock record_header -%} #}
+    {%- block record_title -%}
+     <section id="record-title-section" aria-label="{{ _('Record title') }}">
+     <h1 id="record-title"
+        class="wrap-overflowing-text">
+            {{ui_value(d.title)}}
+        </h1>
+    </section>
+    {%- endblock record_title -%}
+{#     {%- block record_content -%} #}
+{#     {%- endblock record_content -%} #}
+{#     {%- block record_files -%} #}
+{#         {% block record_files_access_request %} #}
+{#         {% endblock record_files_access_request %} #}
+{#     {%- endblock record_files -%} #}
+{#     {%- block record_media_files -%} #}
+{#     {%- endblock record_media_files -%} #}
+{#     {%- block additional_record_details -%} #}
+{#     {%- endblock additional_record_details -%} #}
+{#     {%- block record_footer -%} #}
+{#     {%- endblock record_footer -%} #}
+{# {%- endblock record_body -%} #}
+{# {% block record_sidebar %} #}
+{# {% endblock record_sidebar %} #}
+{# {%- block jump -%} #}
+{# {%- endblock jump -%} #}

@@ -28,7 +28,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
     search_component = UIComponent(
         "{{model_name|title}}ResultsListItem",
         "@js/{{model_name}}/search/ResultsListItem",
-        "default"
+        UIComponentImportMode.DEFAULT
     )
 
     components = [
@@ -53,19 +53,13 @@ class {{resource_config}}(RecordsUIResourceConfig):
         pass
 
     application_id = "{{model_name}}"
-
+ 
     templates = {
-        "detail": "{{model_name}}.Detail",
+        "record_detail": "{{model_name}}.RecordDetail",
         "search": "{{model_name}}.Search",
-        "edit": "{{model_name}}.Deposit",
-        "create": "{{model_name}}.Deposit",
+        "deposit_edit": "{{model_name}}.Deposit",
+        "deposit_create": "{{model_name}}.Deposit",
     }
-
-    search_component = UIComponent(
-        "DatasetsResultsListItem",
-        "@js/{{model_name}}/search/ResultsListItem",
-        UIComponentImportMode.DEFAULT,
-    )
 
 
 class {{resource}}(RecordsUIResource):
