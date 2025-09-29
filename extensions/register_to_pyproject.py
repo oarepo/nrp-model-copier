@@ -81,7 +81,7 @@ def register_model_to_pyproject(model_name):
     pyproject.add_entry_point(
         "invenio_base.finalize_app",
         f"ui_{model_name}",
-        f"ui.{model_name}:init_menu",
+        f"ui.{model_name}:finalize_app",
     )
 
     # add top-level module
