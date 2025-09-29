@@ -21,3 +21,5 @@
     {{ super() }}
     {{ webpack['datasets_deposit_form.js'] }}
 {%- endblock %}
+
+{% endraw %}
