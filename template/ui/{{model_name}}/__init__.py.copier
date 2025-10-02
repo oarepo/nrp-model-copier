@@ -71,6 +71,7 @@ def ui_overrides(app):
 
     if (
         current_oarepo_ui is not None
+        and ui_resource_config.model
         and ui_resource_config.model.record_json_schema
         and ui_resource_config.search_component
     ):
