@@ -33,6 +33,7 @@ class {{ model_name|to_python_class }}PermissionPolicy(RecordPermissionPolicy):
         # help with using customizations, please contact us at support@cesnet.cz and
         # specify the keyword "Invenio repository development" inside the subject or
         # mail body of the request.
+        # TODO: remove this customization if you use oarepo-communities for RDM 14
         SetPermissionPolicy({{ model_name|to_python_class }}PermissionPolicy)
     ],
     configuration={
