@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from invenio_i18n import lazy_gettext as _
-from invenio_records_permissions import RecordPermissionPolicy
 from invenio_records_permissions.generators import AuthenticatedUser
 from oarepo_model.api import model
+from oarepo_model.customizations import AddMixins
+from oarepo_model.model import ModelMixin
 from oarepo_model.presets.drafts import drafts_preset
-from oarepo_rdm.model.presets import rdm_preset
 from oarepo_model.presets.records_resources import records_resources_preset
 from oarepo_model.presets.ui_links import ui_links_preset
 from oarepo_model.datatypes.registry import from_yaml
-from oarepo_model.customizations.high_level.set_permission_policy import SetPermissionPolicy
+from oarepo_rdm.model.presets import rdm_preset
 
 
-class {{ model_name|to_python_class }}PermissionPolicy(RecordPermissionPolicy):
+class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
     """Custom permission policy for {{model_name}}."""
 
     can_view_deposit_page = [AuthenticatedUser()]
@@ -34,7 +34,7 @@ class {{ model_name|to_python_class }}PermissionPolicy(RecordPermissionPolicy):
         # specify the keyword "Invenio repository development" inside the subject or
         # mail body of the request.
         # TODO: remove this customization if you use oarepo-communities for RDM 14
-        SetPermissionPolicy({{ model_name|to_python_class }}PermissionPolicy)
+        AddMixins("PermissionPolicy", {{ model_name|to_python_class }}PermissionPolicyMixin), 
     ],
     configuration={
         "ui_blueprint_name": "{{model_name}}_ui"
