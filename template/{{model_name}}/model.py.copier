@@ -9,7 +9,7 @@ from oarepo_model.presets.drafts import drafts_preset
 from oarepo_model.presets.records_resources import records_resources_preset
 from oarepo_model.presets.ui_links import ui_links_preset
 from oarepo_model.datatypes.registry import from_yaml
-from oarepo_rdm.model.presets import rdm_preset
+from oarepo_rdm.model.presets import rdm_complete_preset
 
 
 class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
@@ -21,7 +21,7 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
 {{model_name}}_model = model(
     "{{model_name}}",
     version="1.0.0",
-    presets=[records_resources_preset, drafts_preset, rdm_preset, ui_links_preset],
+    presets=[rdm_complete_preset],
     types=[
         from_yaml("metadata.yaml", __file__)
     ],
