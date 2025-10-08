@@ -82,9 +82,11 @@ def ui_overrides(app):
 
 def init_menu(app):
     """Initialize menu before first request."""
+    ui_resource_config = {{resource_config}}()
+
     with app.app_context():
         current_menu.submenu("plus.create_{{model_name}}").register(
-            "{{model_name}}.create",
+            f"{ui_resource_config.blueprint_name}.deposit_create",
             _("New {{model_human_name}}"),
             order=1,
             visible_when=can_view_deposit_page,

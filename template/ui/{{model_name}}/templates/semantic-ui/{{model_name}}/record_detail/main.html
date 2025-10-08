@@ -1,5 +1,7 @@
 {% extends "oarepo_ui/record_detail/main.html" %}
 
+{%- set m = d.metadata -%}
+
 {# Available template blocks (from oarepo_ui/record_detail/main.html):
 
 Main Record Content (wrapped in a container grid layout):
@@ -56,12 +58,10 @@ Note: Context variables available:
 - is_preview/is_draft: Record state
 #}
 
-{%- set d = d.metadata -%}
-
 {%- block record_title -%}
 <section id="record-title-section" aria-label="{{ _('Record title') }}">
   <h1 id="record-title" class="wrap-overflowing-text">
-    {{ui_value(d.title)}}
+    {{ui_value(m.title)}}
   </h1>
 </section>
 {%- endblock record_title -%}
