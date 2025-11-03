@@ -3,14 +3,25 @@ from __future__ import annotations
 from invenio_i18n import lazy_gettext as _
 from invenio_records_permissions.generators import AuthenticatedUser
 from oarepo_model.api import model
-from oarepo_model.customizations import AddMixins
+from oarepo_model.customizations import AddMixins, AddMetadataExport
 from oarepo_model.model import ModelMixin
 from oarepo_model.presets.drafts import drafts_preset
 from oarepo_model.presets.records_resources import records_resources_preset
 from oarepo_model.presets.ui_links import ui_links_preset
 from oarepo_model.datatypes.registry import from_yaml
+{% if base_model == "rdm_complete" -%}
 from oarepo_rdm.model.presets import rdm_complete_preset
+{%- elif base_model == "rdm_basic" -%}
+from oarepo_rdm.model.presets import rdm_basic_preset
+{%- elif base_model == "rdm_minimal" -%}
+from oarepo_rdm.model.presets import rdm_minimal_preset
+{%- elif base_model == "ccmm" -%}
+from ccmm_invenio.models import ccmm_production_preset_1_1_0
+{%- elif base_model == "empty" -%}
+from oarepo_model.presets.records_resources import records_resources_preset
+{%- endif %}
 
+from .serializers import DataCiteJSONSerializer
 
 class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
     """Custom permission policy for {{model_name}}."""
@@ -21,7 +32,19 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
 {{model_name}}_model = model(
     "{{model_name}}",
     version="1.0.0",
-    presets=[rdm_complete_preset],
+    presets=[
+{% if base_model == "rdm_complete" %}
+        rdm_complete_preset
+{% elif base_model == "rdm_basic" %}
+        rdm_basic_preset
+{% elif base_model == "rdm_minimal" %}
+        rdm_minimal_preset
+{% elif base_model == "ccmm" %}
+        ccmm_production_preset_1_1_0
+{% elif base_model == "empty" %}
+        records_resources_preset
+{% endif %}
+    ],
     types=[
         from_yaml("metadata.yaml", __file__)
     ],
@@ -35,6 +58,14 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
         # mail body of the request.
         # TODO: remove this customization if you use oarepo-communities for RDM 14
         AddMixins("PermissionPolicy", {{ model_name|to_python_class }}PermissionPolicyMixin), 
+
+        # export for datacite
+        AddMetadataExport(
+            code="datacite",
+            name=_("Datacite export"),
+            mimetype="application/vnd.datacite.datacite+json",
+            serializer=DataCiteJSONSerializer()
+        ),
     ],
     configuration={
         "ui_blueprint_name": "{{model_name}}_ui"

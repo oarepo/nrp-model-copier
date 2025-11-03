@@ -60,7 +60,7 @@ class PyProject:
             top_level_modules.append(module_name)
 
 
-def register_model_to_pyproject(model_name):
+def register_model_to_pyproject(model_name, base_model):
     pyproject = PyProject("pyproject.toml")
 
     # add blueprint
@@ -87,8 +87,14 @@ def register_model_to_pyproject(model_name):
     # add top-level module
     pyproject.add_top_level_module(model_name)
 
+    if base_model == "ccmm":
+        # add dependencies
+        pyproject.add_dependencies(
+            "ccmm-invenio>=1.1.0",
+        )
+
     pyproject.save()
 
 
 if __name__ == "__main__":
-    register_model_to_pyproject(sys.argv[1])
+    register_model_to_pyproject(sys.argv[1], sys.argv[2])

@@ -15,6 +15,19 @@ model_description:
   help: Description of the model
   default: A generic dataset model
 
+base_model:
+  type: str
+  help: |
+    Pick a base model that will be extended. 
+    If unsure, pick complete RDM or CCMM for the Czech National Repository Platform.
+    Empty model does not allow to create drafts.
+  choices:
+    Czech Core Metadata Model: ccmm
+    Complete RDM: rdm_complete
+    Basic RDM: rdm_basic
+    Minimal RDM: rdm_minimal
+    Empty model: empty
+
 endpoint:
   type: str
   default: "{{ model_name|slugify }}"
@@ -54,6 +67,7 @@ _tasks:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_pyproject.py"
     - "{{model_name}}"
+    - "{{base_model}}"
     when: "{{ _copier_operation == 'copy' }}"
   - command: 
     - "{{ _copier_python }}"
