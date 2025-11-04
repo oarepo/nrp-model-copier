@@ -35,9 +35,9 @@ The "embedded" context variable controls certain features.
 #}
 
 {%- block page_banners -%}
-  {% include "datasets/record_detail/banners.html" %}
+  {% include "{% endraw %}{{model_name}}{% raw %}/record_detail/banners.html" %}
 {%- endblock page_banners -%}
 {%- block page_main -%}
-  {% include "datasets/record_detail/main.html" %}
+  {% include "{% endraw %}{{model_name}}{% raw %}/record_detail/main.html" %}
 {%- endblock page_main -%}
 {% endraw %}
