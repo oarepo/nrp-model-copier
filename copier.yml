@@ -39,6 +39,11 @@ languages:
   help: "Comma separated list of languages"
   when: false
 
+requests_enabled:
+    type: bool
+    help: Enable requests?
+    default: yes
+
 resource_config:
   type: str
   default: "{{ model_name|to_python_class }}UIResourceConfig"
