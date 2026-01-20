@@ -4,6 +4,8 @@ Metadata:
   properties:
     title:
       type: fulltext+keyword
-    languages[]:
-      type: vocabulary
-      vocabulary-type: languages
+    languages:
+      type: array
+      items:
+        type: vocabulary
+        vocabulary-type: languages
