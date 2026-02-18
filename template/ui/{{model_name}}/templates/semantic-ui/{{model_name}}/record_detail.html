@@ -1,0 +1,35 @@
+{% extends "oarepo_ui/record_detail.html" %}
+
+{# Base template for {{model_name}} record detail page.
+   The runtime generated component will:
+   - Extend this template
+
+   Template inheritance chain:
+   - this template → oarepo_ui/record_detail.html → invenio_app_rdm/records/detail.html
+
+   Parent template blocks (documented here, see partials for record_* blocks):
+   - page_body: Main page content structure (banners, main content grid, sidebar, jump button)
+   - css: Page-specific CSS (parent adds community theme support)
+   - head_meta: HTML meta tags for SEO and record metadata
+   - javascript: Page-specific JavaScript (parent adds record_sharing.js, json-ld)
+   - record_sidebar: Sidebar content (right column)
+
+   Customization partials (edit these for model-specific content):
+   - banners.html: Banner blocks (community, preview, version)
+   - main.html: Record body blocks (header, title, files, details, footer)
+#}
+
+{%- block banners -%}
+  {%- include "{{model_name}}/record_detail/banners.html" -%}
+{%- endblock banners -%}
+
+{%- block record_body -%}
+  {%- include "{{model_name}}/record_detail/main.html" -%}
+{%- endblock record_body -%}
+
+{%- block record_sidebar -%}
+  {# Uncomment to customize sidebar, or remove block to use oarepo_ui default
+  {%- include "{{model_name}}/record_detail/side_bar.html" -%}
+  #}
+  {{ super() }}
+{%- endblock record_sidebar -%}
