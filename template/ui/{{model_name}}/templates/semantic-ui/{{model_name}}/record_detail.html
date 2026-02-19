@@ -1,11 +1,10 @@
 {% extends "oarepo_ui/record_detail.html" %}
 
 {# Base template for {{model_name}} record detail page.
-   The runtime generated component will:
-   - Extend this template
+   Extended by oarepo_ui.pages.RecordDetail JinjaX component.
 
    Template inheritance chain:
-   - this template → oarepo_ui/record_detail.html → invenio_app_rdm/records/detail.html
+   - oarepo_ui.pages.RecordDetail (JinjaX) → this template → oarepo_ui/record_detail.html → invenio_app_rdm/records/detail.html
 
    Parent template blocks (documented here, see partials for record_* blocks):
    - page_body: Main page content structure (banners, main content grid, sidebar, jump button)
@@ -20,14 +19,16 @@
 #}
 
 {%- block banners -%}
-  {%- include "{{model_name}}/record_detail/banners.html" -%}
+  {%- include [ model_name ~ "/record_detail/banners.html", "oarepo_ui/record_detail/banners.html"]  -%}
 {%- endblock banners -%}
 
 {%- block record_body -%}
   {%- include "{{model_name}}/record_detail/main.html" -%}
 {%- endblock record_body -%}
 
-{%- block record_sidebar -%}
+{%- block javascript -%}
+  {{ super() }}
+  {%- include "{{model_name}}/record_detail/javascript.html" -%}
   {# Uncomment to customize sidebar, or remove block to use oarepo_ui default
   {%- include "{{model_name}}/record_detail/side_bar.html" -%}
   #}

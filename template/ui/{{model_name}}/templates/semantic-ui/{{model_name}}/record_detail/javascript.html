@@ -1,0 +1,22 @@
+{{ super() }}
+{{ webpack[model_name + "_detail.js"] }}
+
+{# Custom JavaScript for {{model_name}} record detail page.
+
+This template is included in the javascript block of record_detail.html.
+Use it to add model-specific JavaScript that runs on the detail page.
+
+Context variables available (declared in JinjaX {# def #} block):
+- record: The record object
+- record_ui: UI-serialized record data
+- model_name: Name of the model
+- permissions: User permission checks dict
+- is_preview: Boolean, preview mode flag
+- is_draft: Boolean, draft status flag
+- ui_links: UI link templates dict
+
+Example usage:
+<script>
+  console.log("Record ID:", "{{ record.id }}");
+</script>
+#}
