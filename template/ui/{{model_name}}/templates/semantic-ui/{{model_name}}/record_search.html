@@ -3,10 +3,14 @@
 {# Base template for {{model_name}} search page.
    Extended by oarepo_ui.pages.RecordSearch JinjaX component.
 
-   Available blocks to override (from oarepo_ui/record_search.html):
-   - javascript
-   - page_body
+   Template inheritance chain:
+   - oarepo_ui.pages.RecordSearch (JinjaX) → this template → oarepo_ui/record_search.html
+     → config.BASE_TEMPLATE
 
-   The record_search.html extends config.BASE_TEMPLATE and renders
-   the search app with react-searchkit.
+   This template exists at the path expected by _TEMPLATE_MAP["search"].
+   The oarepo_ui/record_search.html parent already includes model-specific partials
+   with fallback to oarepo_ui defaults.
+
+   To customize, create/edit these partials (they extend oarepo_ui defaults):
+   - record_search/javascript.html - Custom JavaScript includes (optional)
 #}
