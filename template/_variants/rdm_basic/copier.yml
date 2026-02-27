@@ -1,0 +1,6 @@
+_templates_suffix: .copier
+
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - ../../../extensions/slugify.py:SlugifyExtension
+  - ../../../extensions/to_python_class.py:ToPythonClassExtension

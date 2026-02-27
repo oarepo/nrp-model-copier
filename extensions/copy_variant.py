@@ -1,91 +1,53 @@
-"""Copy variant-specific files over the base template with Jinja processing."""
+"""Copy variant-specific files using Copier's built-in rendering."""
 
 import sys
 from pathlib import Path
 
 import yaml
-from jinja2 import Environment, BaseLoader
-
-from slugify import slugify
-from to_python_class import to_python_class
-
-
-class StringLoader(BaseLoader):
-    """Loader that loads templates from strings."""
-
-    def get_source(self, environment, template):
-        return template, None, lambda: True
-
-
-def create_jinja_env():
-    """Create Jinja environment with custom filters."""
-    env = Environment(loader=StringLoader())
-    env.filters["slugify"] = slugify
-    env.filters["to_python_class"] = to_python_class
-    return env
-
-
-def load_variables(model_name: str) -> dict:
-    """Load variables from .copier-answers.yml file."""
-    answers_file = Path.cwd() / model_name / ".copier-answers.yml"
-    if answers_file.exists():
-        with open(answers_file, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-            # Remove copier internal keys (start with _)
-            return {k: v for k, v in data.items() if not k.startswith("_")}
-    return {}
+from copier import run_copy
 
 
 def copy_variant(base_model: str, model_name: str, src_path: str) -> None:
-    """Copy variant files to destination with Jinja processing."""
+    """Copy variant files to destination using Copier."""
     variant_dir = Path(src_path) / "template" / "_variants" / base_model
 
     if not variant_dir.exists():
         print(f"Warning: Variant directory not found: {variant_dir}")
         return
 
-    # Current directory is the destination (where copier runs)
+    # Current directory is the destination
     dest_dir = Path.cwd()
 
-    # Load variables from answers file
-    variables = load_variables(model_name)
-    print(f"Loaded variables: {list(variables.keys())}")
+    # Load answers from the already-created answers file
+    answers_file = dest_dir / model_name / ".copier-answers.yml"
 
-    # Create Jinja environment
-    jinja_env = create_jinja_env()
+    if not answers_file.exists():
+        print(f"Warning: Answers file not found at {answers_file}")
+        return
 
-    # Walk through variant files and copy them
-    for src_file in variant_dir.rglob("*"):
-        if src_file.is_file():
-            # Get relative path from variant dir
-            rel_path = src_file.relative_to(variant_dir)
+    # Load the data from answers file
+    with open(answers_file, "r", encoding="utf-8") as f:
+        answers = yaml.safe_load(f)
 
-            # Replace {{model_name}} in path with actual model_name
-            rel_path_str = str(rel_path).replace("{{model_name}}", model_name)
+    # Filter out internal copier keys and prepare data
+    data = {k: v for k, v in answers.items() if not k.startswith("_")}
 
-            # Strip .copier suffix if present
-            if rel_path_str.endswith(".copier"):
-                rel_path_str = rel_path_str[:-7]
+    print(f"Copying variant '{base_model}' using Copier...")
+    print(f"Source: {variant_dir}")
+    print(f"Destination: {dest_dir}")
+    print(f"Data: {data}")
 
-            dest_file = dest_dir / rel_path_str
+    # Use Copier to copy the variant, reusing all its template processing
+    run_copy(
+        src_path=str(variant_dir),
+        dst_path=str(dest_dir),
+        data=data,
+        unsafe=True,
+        defaults=True,
+        overwrite=True,
+    )
 
-            # Create parent directories if needed
-            dest_file.parent.mkdir(parents=True, exist_ok=True)
-
-            # Read source file
-            content = src_file.read_text(encoding="utf-8")
-
-            # Process Jinja templates for .copier files (and other template files)
-            if src_file.suffix == ".copier" or "{{" in content:
-                try:
-                    template = jinja_env.from_string(content)
-                    content = template.render(**variables)
-                except Exception as e:
-                    print(f"Warning: Failed to process template {rel_path}: {e}")
-
-            # Write to destination
-            dest_file.write_text(content, encoding="utf-8")
-            print(f"Copied variant file: {rel_path_str}")
+    print(f"Variant '{base_model}' copied successfully.")
 
 
 if __name__ == "__main__":
