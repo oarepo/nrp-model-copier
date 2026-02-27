@@ -1,0 +1,56 @@
+"""
+{{model_description}}
+"""
+from __future__ import annotations
+
+from invenio_i18n import lazy_gettext as _
+from invenio_records_permissions.generators import AuthenticatedUser
+from oarepo_model.api import model
+from oarepo_model.customizations import PrependMixin, AddMetadataExport
+from oarepo_model.model import ModelMixin
+from oarepo_model.presets.drafts import drafts_preset
+from oarepo_model.presets.records_resources import records_resources_preset
+from oarepo_model.presets.ui_links import ui_links_preset
+from oarepo_model.datatypes.registry import from_yaml
+from ccmm_invenio.models import ccmm_production_preset_1_1_0
+
+from .serializers import DataCiteJSONSerializer
+
+class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
+    """Custom permission policy for {{model_name}}."""
+
+    can_view_deposit_page = [AuthenticatedUser()]
+
+
+{{model_name}}_model = model(
+    "{{model_name}}",
+    version="1.0.0",
+    presets=[
+        ccmm_production_preset_1_1_0
+    ],
+    types=[
+        from_yaml("metadata.yaml", __file__)
+    ],
+    metadata_type="Metadata",
+    customizations=[
+        # Add your customizations here, such as custom exports and class mixins.
+        # The list of available extensions is at https://github.com/oarepo/oarepo-model.
+        # If you do not find a customization that suits your needs or need a
+        # help with using customizations, please contact us at support@cesnet.cz and
+        # specify the keyword "Invenio repository development" inside the subject or
+        # mail body of the request.
+        # TODO: remove this customization if you use oarepo-communities for RDM 14
+        PrependMixin("PermissionPolicy", {{ model_name|to_python_class }}PermissionPolicyMixin),
+
+        # export for datacite
+        AddMetadataExport(
+            code="datacite",
+            name=_("Datacite export"),
+            mimetype="application/vnd.datacite.datacite+json",
+            serializer=DataCiteJSONSerializer()
+        ),
+    ],
+    configuration={
+        "ui_blueprint_name": "{{model_name}}_ui"
+    }
+)

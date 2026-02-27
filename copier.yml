@@ -60,16 +60,25 @@ _templates_suffix: .copier
 
 _subdirectory: template
 
+_exclude:
+  - "_variants"
+
 _answers_file: "{{model_name}}/.copier-answers.yml"
 
 _tasks:
-  - command: 
+  - command:
+    - "{{ _copier_python }}"
+    - "{{ _copier_conf.src_path }}/extensions/copy_variant.py"
+    - "{{base_model}}"
+    - "{{model_name}}"
+    - "{{ _copier_conf.src_path }}"
+  - command:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_pyproject.py"
     - "{{model_name}}"
     - "{{base_model}}"
     when: "{{ _copier_operation == 'copy' }}"
-  - command: 
+  - command:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_invenio_cfg.py"
     - "{{model_name}}"

@@ -1,10 +1,6 @@
 from flask_resources import BaseListSchema, MarshmallowSerializer
-from flask_resources.serializers import BaseSerializerSchema, JSONSerializer
-{% if base_model == 'ccmm' %}
+from flask_resources.serializers import JSONSerializer
 from ccmm_invenio.serializers.datacite import DataCiteSchema
-{% elif base_model == 'rdm_complete'%}
-from invenio_rdm_records.resources.serializers.datacite.schema import DataCite43Schema as DataCiteSchema
-{% endif %}
 
 class DataCiteJSONSerializer(MarshmallowSerializer):
     """Marshmallow based DataCite serializer for records."""
@@ -18,10 +14,3 @@ class DataCiteJSONSerializer(MarshmallowSerializer):
             schema_kwargs={{ '{' }}{{ '}' }},
             **options,
         )
-
-{% if base_model != 'ccmm' and base_model != 'rdm_complete' %}
-class DataCiteSchema(BaseSerializerSchema):
-    """DataCite schema."""
-
-    # TODO: implement the schema fields
-{% endif %}
