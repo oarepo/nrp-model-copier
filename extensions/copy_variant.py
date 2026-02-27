@@ -1,53 +1,91 @@
-"""Copy variant-specific files using Copier's built-in rendering."""
+"""Copy variant-specific files with Jinja processing."""
 
 import sys
 from pathlib import Path
 
 import yaml
-from copier import run_copy
+from jinja2 import Environment, BaseLoader
+
+# Import filter functions directly (same directory)
+sys.path.insert(0, str(Path(__file__).parent))
+from slugify import slugify
+from to_python_class import to_python_class
+
+
+def create_jinja_env():
+    """Create Jinja environment with custom filters."""
+    env = Environment(
+        loader=BaseLoader(),
+        keep_trailing_newline=True,
+    )
+    env.filters["slugify"] = slugify
+    env.filters["to_python_class"] = to_python_class
+    return env
 
 
 def copy_variant(base_model: str, model_name: str, src_path: str) -> None:
-    """Copy variant files to destination using Copier."""
+    """Copy variant files to destination with Jinja processing."""
     variant_dir = Path(src_path) / "template" / "_variants" / base_model
-
-    if not variant_dir.exists():
-        print(f"Warning: Variant directory not found: {variant_dir}")
-        return
-
-    # Current directory is the destination
     dest_dir = Path.cwd()
-
-    # Load answers from the already-created answers file
     answers_file = dest_dir / model_name / ".copier-answers.yml"
 
-    if not answers_file.exists():
-        print(f"Warning: Answers file not found at {answers_file}")
+    print(f"=== copy_variant ===")
+    print(f"base_model: {base_model}")
+    print(f"model_name: {model_name}")
+    print(f"variant_dir: {variant_dir}")
+    print(f"dest_dir: {dest_dir}")
+    print(f"answers_file: {answers_file}")
+
+    if not variant_dir.exists():
+        print(f"ERROR: Variant directory not found: {variant_dir}")
         return
 
-    # Load the data from answers file
+    if not answers_file.exists():
+        print(f"ERROR: Answers file not found: {answers_file}")
+        return
+
+    # Load variables
     with open(answers_file, "r", encoding="utf-8") as f:
-        answers = yaml.safe_load(f)
+        data = yaml.safe_load(f)
 
-    # Filter out internal copier keys and prepare data
-    data = {k: v for k, v in answers.items() if not k.startswith("_")}
+    variables = {k: v for k, v in data.items() if not k.startswith("_")}
+    print(f"Variables: {variables}")
 
-    print(f"Copying variant '{base_model}' using Copier...")
-    print(f"Source: {variant_dir}")
-    print(f"Destination: {dest_dir}")
-    print(f"Data: {data}")
+    jinja_env = create_jinja_env()
 
-    # Use Copier to copy the variant, reusing all its template processing
-    run_copy(
-        src_path=str(variant_dir),
-        dst_path=str(dest_dir),
-        data=data,
-        unsafe=True,
-        defaults=True,
-        overwrite=True,
-    )
+    # Process all files in variant directory (skip copier.yml)
+    for src_file in variant_dir.rglob("*"):
+        if src_file.is_file() and src_file.name != "copier.yml":
+            rel_path = src_file.relative_to(variant_dir)
 
-    print(f"Variant '{base_model}' copied successfully.")
+            # Render path (replace {{model_name}} in directory/file names)
+            rel_path_str = str(rel_path)
+            try:
+                rel_path_str = jinja_env.from_string(rel_path_str).render(**variables)
+            except Exception as e:
+                print(f"Warning: Failed to render path {rel_path}: {e}")
+
+            # Strip .copier suffix
+            if rel_path_str.endswith(".copier"):
+                rel_path_str = rel_path_str[:-7]
+
+            dest_file = dest_dir / rel_path_str
+            dest_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # Read and process content
+            content = src_file.read_text(encoding="utf-8")
+
+            if src_file.suffix == ".copier" or "{{" in content:
+                try:
+                    content = jinja_env.from_string(content).render(**variables)
+                except Exception as e:
+                    print(f"ERROR processing {rel_path}: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    continue
+
+            dest_file.write_text(content, encoding="utf-8")
+            print(f"Copied: {rel_path_str}")
 
 
 if __name__ == "__main__":
