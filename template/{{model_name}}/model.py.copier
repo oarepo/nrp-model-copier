@@ -37,7 +37,7 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
 {{model_name}}_model = model(
     "{{model_name}}",
     version="1.0.0",
-    description="{{model_description}}",
+    description={{ model_description|tojson }},
     presets=[
 {% if base_model == "rdm_complete" %}
         rdm_complete_preset
