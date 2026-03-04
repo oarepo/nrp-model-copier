@@ -2,7 +2,6 @@ import { DepositFormApp, parseFormAppConfig } from "@js/oarepo_ui/forms";
 import React from "react";
 import ReactDOM from "react-dom";
 import { i18next } from "@translations/i18next";
-import { OARepoDepositSerializer } from "@js/oarepo_ui/api";
 import { TitlesField, UppyUploader } from "@js/invenio_rdm_records";
 
 const { rootEl, config, ...rest } = parseFormAppConfig();

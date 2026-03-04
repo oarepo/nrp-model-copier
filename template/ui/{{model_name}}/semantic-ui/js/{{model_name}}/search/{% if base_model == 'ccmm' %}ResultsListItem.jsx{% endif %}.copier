@@ -11,7 +11,7 @@ import { DisplayPartOfCommunities } from "@js/invenio_app_rdm/components/Display
 
 class ResultsListItem extends Component {
   render() {
-    const { currentQueryState, result, key, appName } = this.props;
+    const { currentQueryState, result, appName } = this.props;
 
     const accessStatusId = _get(result, "ui.access_status.id", "open");
     const accessStatus = _get(result, "ui.access_status.title_l10n", "Open");
@@ -43,7 +43,7 @@ class ResultsListItem extends Component {
     const subjects = _get(result, "ui.subjects", []);
     const title = _get(result, "metadata.title", i18next.t("No title"));
     const version = _get(result, "ui.version", null);
-    const versions = _get(result, "versions");
+    const versions = _get(result, "versions", { index: 1 });
     const uniqueViews = _get(result, "stats.all_versions.unique_views", 0);
     const uniqueDownloads = _get(result, "stats.all_versions.unique_downloads", 0);
 
@@ -59,7 +59,6 @@ class ResultsListItem extends Component {
       <Overridable
         id={buildUID("RecordsResultsListItem.layout", "", appName)}
         result={result}
-        key={key}
         accessStatusId={accessStatusId}
         accessStatus={accessStatus}
         accessStatusIcon={accessStatusIcon}
@@ -75,13 +74,14 @@ class ResultsListItem extends Component {
         allVersionsVisible={allVersionsVisible}
         numOtherVersions={numOtherVersions}
       >
-        <Item key={key ?? result.id}>
+        <Item key={result.id}>
           <Item.Content>
             {/* FIXME: Uncomment to enable themed banner */}
             {/* <DisplayVerifiedCommunity communities={result.parent?.communities} /> */}
             <Item.Extra className="labels-actions">
               <Label horizontal size="small" className="primary theme-primary">
-                {publicationDate} ({version})
+                {publicationDate}
+                {version && ` (${version})`}
               </Label>
               <Label horizontal size="small" className="neutral">
                 {resourceType}
@@ -169,12 +169,10 @@ class ResultsListItem extends Component {
 ResultsListItem.propTypes = {
   currentQueryState: PropTypes.object,
   result: PropTypes.object.isRequired,
-  key: PropTypes.string,
   appName: PropTypes.string,
 };
 
 ResultsListItem.defaultProps = {
-  key: null,
   currentQueryState: null,
   appName: "",
 };

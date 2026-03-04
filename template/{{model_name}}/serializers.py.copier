@@ -20,7 +20,7 @@ class DataCiteJSONSerializer(MarshmallowSerializer):
             **options,
         )
 
-{% if base_model != 'rdm_complete' %}
+{% if base_model != 'rdm_complete' and base_model != 'ccmm' %}
 class DataCiteSchema(BaseSerializerSchema):
     """DataCite schema."""
 

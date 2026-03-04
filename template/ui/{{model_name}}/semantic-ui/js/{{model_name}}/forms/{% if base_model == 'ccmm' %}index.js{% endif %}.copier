@@ -18,8 +18,6 @@ const parametrizeEDTFSingleDatePicker = parametrize(EDTFSingleDatePicker, {
   customInputProps: { width: 16 },
 });
 
-const overridableIdPrefix = config.overridableIdPrefix;
-
 export const componentOverrides = {
   "InvenioRdmRecords.DepositForm.DatesField.DateField":
     parametrizeEDTFSingleDatePicker,

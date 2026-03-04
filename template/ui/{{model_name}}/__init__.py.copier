@@ -46,9 +46,17 @@ class {{resource_config}}(RecordsUIResourceConfig):
         EmptyRecordAccessComponent,
         FilesLockedComponent,
         FilesQuotaAndTransferComponent,
-        CommunitiesMembershipsComponent,
-        RDMVocabularyOptionsComponent,
     ]
+
+    try:
+        from oarepo_rdm.ui.components import (
+            CommunitiesMembershipsComponent,
+            RDMVocabularyOptionsComponent
+        )
+        components.append(RDMVocabularyOptionsComponent)
+        components.append(CommunitiesMembershipsComponent)
+    except ImportError:
+        pass
     
 
     application_id = "{{model_name}}"
