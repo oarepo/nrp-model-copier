@@ -7,6 +7,7 @@ def register_model_to_invenio_cfg(model_name):
     model_registration = f"""
 # {model_name} model registration
 from models.{model_name} import {model_name}_model
+
 {model_name}_model.register()
 """
 
