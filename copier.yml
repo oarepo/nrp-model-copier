@@ -60,7 +60,7 @@ _templates_suffix: .copier
 
 _subdirectory: template
 
-_answers_file: "{{model_name}}/.copier-answers.yml"
+_answers_file: "models/{{model_name}}/.copier-answers.yml"
 
 _tasks:
   - command: 
