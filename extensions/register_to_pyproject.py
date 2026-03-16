@@ -84,9 +84,6 @@ def register_model_to_pyproject(model_name, base_model):
         f"ui.{model_name}:finalize_app",
     )
 
-    # add top-level module
-    pyproject.add_top_level_module(model_name)
-
     if base_model == "ccmm":
         # add dependencies
         pyproject.add_dependencies(

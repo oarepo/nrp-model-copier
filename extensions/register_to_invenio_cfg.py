@@ -6,7 +6,7 @@ def register_model_to_invenio_cfg(model_name, endpoint):
     invenio_cfg_path = "invenio.cfg"
     model_registration = f"""
 # {model_name} model registration
-from {model_name} import {model_name}_model
+from models.{model_name} import {model_name}_model
 
 {model_name}_model.register()
 DASHBOARD_RECORD_CREATE_URL = "/{endpoint}/uploads/new"
