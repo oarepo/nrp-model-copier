@@ -1,113 +1,15 @@
 import { DepositFormApp, parseFormAppConfig } from "@js/oarepo_ui/forms";
+import { RDMMinimalSections, RDMMinimalRecordSerializer } from "@js/oarepo_rdm_ui/form";
 import React from "react";
 import ReactDOM from "react-dom";
-import { i18next } from "@translations/i18next";
-import { RDMDepositRecordSerializer } from "@js/invenio_rdm_records/src/deposit/api/DepositRecordSerializer";
-import {
-  UppyUploader,
-  CommunityHeader,
-  AccessRightField,
-} from "@js/invenio_rdm_records";
-import Overridable from "react-overridable";
-import { buildUID } from "react-searchkit";
-
-class {{model_name|to_python_class}}DepositRecordSerializer extends RDMDepositRecordSerializer {
-  get depositRecordSchema() {}
-}
 
 const { rootEl, config, ...rest } = parseFormAppConfig();
-const recordSerializer = new {{model_name|to_python_class}}DepositRecordSerializer();
+const recordSerializer = new RDMMinimalRecordSerializer(
+  config.default_locale,
+  config.custom_fields.vocabularies,
+);
 
-const sections = [
-  {
-    key: "community-and-access",
-    label: i18next.t("Community and Access"),
-    component: (tabConfig) => {
-      const { initialRecord, record, formConfig } = tabConfig;
-      const {
-        hide_community_selection: hideCommunitySelection,
-        permissions,
-        allowRecordRestriction,
-        recordRestrictionGracePeriod,
-      } = formConfig.config;
-      const { overridableIdPrefix } = formConfig;
-      return (
-        <>
-          {!hideCommunitySelection && (
-            <Overridable
-              id={buildUID(overridableIdPrefix, "Communities")}
-              {...tabConfig}
-            >
-              <CommunityHeader
-                imagePlaceholderLink="/static/images/square-placeholder.png"
-                record={initialRecord}
-              />
-            </Overridable>
-          )}
-          <Overridable
-            id={buildUID(overridableIdPrefix, "Access")}
-            {...tabConfig}
-          >
-            <AccessRightField
-              label={i18next.t("Visibility")}
-              record={record}
-              labelIcon="shield"
-              fieldPath="access"
-              showMetadataAccess={permissions?.can_manage_record_access}
-              recordRestrictionGracePeriod={recordRestrictionGracePeriod}
-              allowRecordRestriction={allowRecordRestriction}
-              id="visibility-section"
-            />
-          </Overridable>
-        </>
-      );
-    },
-    includesPaths: ["parent.communities", "access"],
-  },
-  {
-    key: "general-information",
-    label: i18next.t("General information"),
-    component: () => {
-      return (
-        <p>
-          {i18next.t("Please define your sections.")}{" "}
-          <a
-            href="https://nrp-cz.github.io/docs/customize/model_ui/deposit#defining-sections"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {i18next.t("See the documentation")}
-          </a>
-        </p>
-      );
-    },
-    includesPaths: [],
-  },
-  {
-    key: "files",
-    label: i18next.t("Upload files"),
-    component: (tabConfig) => {
-      const { record, formConfig } = tabConfig;
-      const { filesLocked, permissions } = formConfig.config;
-      const { overridableIdPrefix } = formConfig;
-      return (
-        <Overridable id={buildUID(overridableIdPrefix, "Files")} {...tabConfig}>
-          <UppyUploader
-            isDraftRecord={!record.is_published}
-            config={formConfig}
-            quota={formConfig.quota}
-            decimalSizeDisplay={formConfig.decimal_size_display}
-            allowEmptyFiles={formConfig.allow_empty_files}
-            fileUploadConcurrency={formConfig.file_upload_concurrency}
-            showMetadataOnlyToggle={permissions?.can_manage_files}
-            filesLocked={filesLocked}
-          />
-        </Overridable>
-      );
-    },
-    includesPaths: ["files.enabled"],
-  },
-];
+const sections = RDMMinimalSections;
 
 ReactDOM.render(
   <DepositFormApp
