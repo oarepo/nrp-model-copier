@@ -1,0 +1,3 @@
+{% extends "oarepo_ui/record_detail/main.html" %}
+
+{%- set m = d.metadata -%}

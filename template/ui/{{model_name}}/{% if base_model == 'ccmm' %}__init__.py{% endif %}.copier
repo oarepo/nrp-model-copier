@@ -1,34 +1,19 @@
-from oarepo_ui.resources import BabelComponent
-from oarepo_ui.resources.components import (
-    # AllowedCommunitiesComponent,
-    AllowedHtmlTagsComponent,
-    EmptyRecordAccessComponent,
-    FilesComponent,
-    FilesLockedComponent,
-    FilesQuotaAndTransferComponent,
-    RecordRestrictionComponent,
-    PermissionsComponent,
-)
-from oarepo_ui.resources.components.custom_fields import CustomFieldsComponent
-from oarepo_ui.resources.records.config import RecordsUIResourceConfig
-from oarepo_ui.resources.records.resource import RecordsUIResource
+from ccmm_invenio.ui.config import CCMMRecordsUIResourceConfig
+from ccmm_invenio.ui.resource import CCMMRecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
 from flask_menu import current_menu
 from invenio_i18n import lazy_gettext as _
 from oarepo_ui.overrides import UIComponent
 from oarepo_ui.overrides.components import UIComponentImportMode
 from oarepo_ui.proxies import current_oarepo_ui
-from oarepo_rdm.ui.components import (
-    CommunitiesMembershipsComponent,
-    RDMVocabularyOptionsComponent,
-)
 
-class {{resource_config}}(RecordsUIResourceConfig):
+
+class {{resource_config}}(CCMMRecordsUIResourceConfig):
     template_folder = "templates"
     url_prefix = "/{{endpoint}}"
     blueprint_name = "{{model_name}}_ui"
     model_name = "{{model_name}}"
-
+    model_type = "{{base_model}}"
     search_component = UIComponent(
         "{{model_name|title}}ResultsListItem",
         "@js/{{model_name}}/search/ResultsListItem",
@@ -36,33 +21,13 @@ class {{resource_config}}(RecordsUIResourceConfig):
     )
 
     components = [
-        AllowedHtmlTagsComponent,
-        BabelComponent,
-        PermissionsComponent,
-        FilesComponent,
-        # AllowedCommunitiesComponent,
-        CustomFieldsComponent,
-        RecordRestrictionComponent,
-        EmptyRecordAccessComponent,
-        FilesLockedComponent,
-        FilesQuotaAndTransferComponent,
+        *CCMMRecordsUIResourceConfig.components,
     ]
-
-    try:
-        from oarepo_rdm.ui.components import (
-            CommunitiesMembershipsComponent,
-            RDMVocabularyOptionsComponent
-        )
-        components.append(RDMVocabularyOptionsComponent)
-        components.append(CommunitiesMembershipsComponent)
-    except ImportError:
-        pass
-    
 
     application_id = "{{model_name}}"
 
 
-class {{resource}}(RecordsUIResource):
+class {{resource}}(CCMMRecordsUIResource):
     pass
 
 def ui_overrides(app):
@@ -101,5 +66,3 @@ def create_blueprint(app):
     """Register blueprint for this resource."""
     blueprint = {{resource}}({{resource_config}}()).as_blueprint()
     return blueprint
-
-# TODO: register init_menu to finalize_app similarly blueprints & webpack is registered

@@ -1,0 +1,54 @@
+import React from "react";
+import PropTypes from "prop-types";
+import _get from "lodash/get";
+import { Item, Label } from "semantic-ui-react";
+import { i18next } from "@translations/i18next";
+
+export const ResultsListItem = ({ result }) => {
+  const accessRights = _get(result, "ui.access_status", null);
+  const createdDate = _get(
+    result,
+    "ui.created_date_l10n_short",
+    "No creation date found."
+  );
+  const viewLink = result.links.self_html;
+
+  return (
+    <Item key={result.id} data-testid="result-item">
+      <Item.Content>
+        <div className="justify-space-between flex">
+          <Item.Header as="h2">
+            <a href={viewLink}>{result.id}</a>
+          </Item.Header>
+          <div className="item-access-rights">
+            {result.state && (
+              <Label title={result.state_timestamp}>{result.state}</Label>
+            )}
+            {accessRights && accessRights.id !== "open" && (
+              <Label title={`${accessRights.description_l10n}`}>
+                {accessRights.title_l10n}
+              </Label>
+            )}
+          </div>
+        </div>
+        <Item.Extra>
+          <small>
+            <p>
+              {createdDate && (
+                <>
+                  {i18next.t("Uploaded on")} <span>{createdDate}</span>
+                </>
+              )}
+            </p>
+          </small>
+        </Item.Extra>
+      </Item.Content>
+    </Item>
+  );
+};
+
+ResultsListItem.propTypes = {
+  result: PropTypes.object.isRequired,
+};
+
+export default ResultsListItem;

@@ -22,6 +22,7 @@ from oarepo_rdm.model.presets import rdm_minimal_preset
 from ccmm_invenio.models import ccmm_production_preset_1_1_0
 {%- elif base_model == "empty" -%}
 from oarepo_model.presets.records_resources import records_resources_preset
+from oarepo_model.presets.ui_links import ui_links_preset
 {%- endif %}
 
 from .serializers import DataCiteJSONSerializer
@@ -48,7 +49,8 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
 {% elif base_model == "ccmm" %}
         ccmm_production_preset_1_1_0
 {% elif base_model == "empty" %}
-        records_resources_preset
+        records_resources_preset,
+        ui_links_preset,
 {% endif %}
     ],
     types=[

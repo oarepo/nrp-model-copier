@@ -1,0 +1,160 @@
+import { DepositFormApp, parseFormAppConfig } from "@js/oarepo_ui/forms";
+import React from "react";
+import ReactDOM from "react-dom";
+import { i18next } from "@translations/i18next";
+import { RDMDepositRecordSerializer } from "@js/invenio_rdm_records/src/deposit/api/DepositRecordSerializer";
+import {
+  TitlesField,
+  ResourceTypeField,
+  UppyUploader,
+  CommunityHeader,
+  AccessRightField,
+} from "@js/invenio_rdm_records";
+import { EDTFSingleDatePicker, CreatibutorsField } from "@js/oarepo_ui/forms";
+import Overridable from "react-overridable";
+import { buildUID } from "react-searchkit";
+
+const { rootEl, config, ...rest } = parseFormAppConfig();
+const recordSerializer = new RDMDepositRecordSerializer(
+  config.default_locale,
+  config.custom_fields.vocabularies,
+);
+
+const sections = [
+  {
+    key: "community-and-access",
+    label: i18next.t("Community and Access"),
+    component: (tabConfig) => {
+      const { initialRecord, record, formConfig } = tabConfig;
+      const {
+        hide_community_selection: hideCommunitySelection,
+        permissions,
+        allowRecordRestriction,
+        recordRestrictionGracePeriod,
+      } = formConfig.config;
+      const { overridableIdPrefix } = formConfig;
+      return (
+        <>
+          {!hideCommunitySelection && (
+            <Overridable
+              id={buildUID(overridableIdPrefix, "Communities")}
+              {...tabConfig}
+            >
+              <CommunityHeader
+                imagePlaceholderLink="/static/images/square-placeholder.png"
+                record={initialRecord}
+              />
+            </Overridable>
+          )}
+          <Overridable
+            id={buildUID(overridableIdPrefix, "Access")}
+            {...tabConfig}
+          >
+            <AccessRightField
+              label={i18next.t("Visibility")}
+              record={record}
+              labelIcon="shield"
+              fieldPath="access"
+              showMetadataAccess={permissions?.can_manage_record_access}
+              recordRestrictionGracePeriod={recordRestrictionGracePeriod}
+              allowRecordRestriction={allowRecordRestriction}
+              id="visibility-section"
+            />
+          </Overridable>
+        </>
+      );
+    },
+    includesPaths: ["parent.communities", "access"],
+  },
+  {
+    key: "general-information",
+    label: i18next.t("General information"),
+    component: (tabConfig) => {
+      const { record, formConfig } = tabConfig;
+      const { vocabularies } = formConfig.config;
+      const { overridableIdPrefix } = formConfig;
+      return (
+        <>
+          <Overridable
+            id={buildUID(overridableIdPrefix, "Title")}
+            {...tabConfig}
+          >
+            <TitlesField
+              options={vocabularies?.titles}
+              fieldPath="metadata.title"
+              recordUI={record.ui}
+              required
+            />
+          </Overridable>
+          <Overridable
+            id={buildUID(overridableIdPrefix, "ResourceType")}
+            {...tabConfig}
+          >
+            <ResourceTypeField
+              options={vocabularies?.resource_type}
+              fieldPath="metadata.resource_type"
+              required
+            />
+          </Overridable>
+          <Overridable
+            id={buildUID(overridableIdPrefix, "PublicationDate")}
+            {...tabConfig}
+          >
+            <EDTFSingleDatePicker fieldPath="metadata.publication_date" />
+          </Overridable>
+          <Overridable
+            id={buildUID(overridableIdPrefix, "Creators")}
+            {...tabConfig}
+          >
+            <CreatibutorsField
+              fieldPath="metadata.creators"
+              schema="creators"
+              autocompleteNames="search"
+            />
+          </Overridable>
+        </>
+      );
+    },
+    includesPaths: [
+      "metadata.resource_type",
+      "metadata.publication_date",
+      "metadata.title",
+      "metadata.creators",
+    ],
+  },
+  {
+    key: "files",
+    label: i18next.t("Upload files"),
+    component: (tabConfig) => {
+      const { record, formConfig } = tabConfig;
+      const { filesLocked, permissions } = formConfig.config;
+      const { overridableIdPrefix } = formConfig;
+      return (
+        <Overridable id={buildUID(overridableIdPrefix, "Files")} {...tabConfig}>
+          <UppyUploader
+            isDraftRecord={!record.is_published}
+            config={formConfig}
+            quota={formConfig.quota}
+            decimalSizeDisplay={formConfig.decimal_size_display}
+            allowEmptyFiles={formConfig.allow_empty_files}
+            fileUploadConcurrency={formConfig.file_upload_concurrency}
+            showMetadataOnlyToggle={permissions?.can_manage_files}
+            filesLocked={filesLocked}
+          />
+        </Overridable>
+      );
+    },
+    includesPaths: ["files.enabled"],
+  },
+];
+
+ReactDOM.render(
+  <DepositFormApp
+    config={config}
+    {...rest}
+    sections={sections}
+    recordSerializer={recordSerializer}
+    useWizardForm
+  />,
+  rootEl,
+);
