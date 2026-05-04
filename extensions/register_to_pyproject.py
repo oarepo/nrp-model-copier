@@ -87,12 +87,6 @@ def register_model_to_pyproject(model_name, base_model):
     # add top-level module
     pyproject.add_top_level_module(model_name)
 
-    if base_model == "ccmm":
-        # add dependencies
-        pyproject.add_dependencies(
-            "ccmm-invenio>=1.1.0a1",
-        )
-
     pyproject.save()
 
 
