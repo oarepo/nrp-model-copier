@@ -63,6 +63,9 @@ class PyProject:
 def register_model_to_pyproject(model_name, base_model):
     pyproject = PyProject("pyproject.toml")
 
+    # ensure the models top-level package is included in the build-backend configuration
+    pyproject.add_top_level_module("models")
+
     # add blueprint
     pyproject.add_entry_point(
         "invenio_base.blueprints",

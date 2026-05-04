@@ -60,7 +60,7 @@ _templates_suffix: .copier
 
 _subdirectory: template
 
-_answers_file: "{{model_name}}/.copier-answers.yml"
+_answers_file: "models/{{model_name}}/.copier-answers.yml"
 
 _tasks:
   - command: 
@@ -73,5 +73,4 @@ _tasks:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_invenio_cfg.py"
     - "{{model_name}}"
-    - "{{endpoint}}"
     when: "{{ _copier_operation == 'copy' }}"
