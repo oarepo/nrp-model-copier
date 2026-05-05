@@ -1,0 +1,18 @@
+# Copyright (C) 2025 CESNET z.s.p.o.
+# OARepo is free software; you can redistribute it and/or modify
+# it under the terms of the MIT License; see LICENSE file for more details.
+
+name: Repository Generation Test
+
+on:
+  pull_request:
+    branches: [rdm-14]
+
+jobs:
+  integration:
+    permissions:
+      contents: read
+    uses: oarepo/oarepo/.github/workflows/repository-generation-test.yaml@main
+    with:
+      model_template: ${{ github.event.pull_request.head.repo.html_url }}
+      model_template_version: ${{ github.event.pull_request.head.sha }}
