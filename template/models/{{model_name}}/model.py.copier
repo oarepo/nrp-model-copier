@@ -8,9 +8,6 @@ from invenio_records_permissions.generators import AuthenticatedUser
 from oarepo_model.api import model
 from oarepo_model.customizations import PrependMixin, AddMetadataExport
 from oarepo_model.model import ModelMixin
-from oarepo_model.presets.drafts import drafts_preset
-from oarepo_model.presets.records_resources import records_resources_preset
-from oarepo_model.presets.ui_links import ui_links_preset
 from oarepo_model.datatypes.registry import from_yaml
 {% if base_model == "rdm_complete" -%}
 from oarepo_rdm.model.presets import rdm_complete_preset
