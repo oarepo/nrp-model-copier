@@ -1,5 +1,5 @@
 import { DepositFormApp, parseFormAppConfig, EDTFSingleDatePicker } from "@js/oarepo_ui/forms";
-import { RDMCompleteSections } from "@js/oarepo_rdm_ui/form";
+import { RDMCompleteSections } from "@js/oarepo_rdm/form";
 import React from "react";
 import ReactDOM from "react-dom";
 import { parametrize } from "react-overridable";

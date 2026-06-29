@@ -11,6 +11,9 @@ from oarepo_ui.resources.components import (
     RecordRestrictionComponent,
 {% endif %}
 )
+{% if base_model == 'rdm_minimal' or base_model == 'empty' %}
+from oarepo_rdm.ui.components import FilesEnabledComponent
+{% endif %}
 from oarepo_ui.resources.records.config import RecordsUIResourceConfig
 from oarepo_ui.resources.records.resource import RecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
@@ -38,6 +41,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
         BabelComponent,
         PermissionsComponent,
         FilesComponent,
+        FilesEnabledComponent,
         CustomFieldsComponent,
         RecordRestrictionComponent,
         EmptyRecordAccessComponent,
@@ -47,6 +51,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
 {% else %}
     components = [
         AllowedHtmlTagsComponent,
+        FilesEnabledComponent,
         BabelComponent,
         PermissionsComponent,
         FilesComponent,
