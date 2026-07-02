@@ -4,10 +4,8 @@
 from __future__ import annotations
 
 from invenio_i18n import lazy_gettext as _
-from invenio_records_permissions.generators import AuthenticatedUser
 from oarepo_model.api import model
-from oarepo_model.customizations import PrependMixin, AddMetadataExport
-from oarepo_model.model import ModelMixin
+from oarepo_model.customizations import AddMetadataExport
 from oarepo_model.datatypes.registry import from_yaml
 {% if base_model == "rdm_complete" -%}
 from oarepo_rdm.model.presets import rdm_complete_preset
@@ -23,12 +21,6 @@ from oarepo_model.presets.ui_links import ui_links_preset
 {%- endif %}
 
 from .serializers import DataCiteJSONSerializer
-
-class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
-    """Custom permission policy for {{model_name}}."""
-
-    can_view_deposit_page = [AuthenticatedUser()]
-
 
 # TODO: Consider letting users add an image/icon for the model,
 # so that the deposit model selection page is more visually appealing.
@@ -61,8 +53,6 @@ class {{ model_name|to_python_class }}PermissionPolicyMixin(ModelMixin):
         # help with using customizations, please contact us at support@cesnet.cz and
         # specify the keyword "Invenio repository development" inside the subject or
         # mail body of the request.
-        # TODO: remove this customization if you use oarepo-communities for RDM 14
-        PrependMixin("PermissionPolicy", {{ model_name|to_python_class }}PermissionPolicyMixin), 
 
         # export for datacite
         AddMetadataExport(
