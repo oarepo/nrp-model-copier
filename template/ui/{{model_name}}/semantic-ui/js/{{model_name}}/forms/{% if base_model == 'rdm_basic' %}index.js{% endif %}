@@ -1,0 +1,18 @@
+import { DepositFormApp, parseFormAppConfig } from "@js/oarepo_ui/forms";
+import { RDMBasicSections } from "@js/oarepo_rdm/form";
+import React from "react";
+import ReactDOM from "react-dom";
+
+const { rootEl, config, ...rest } = parseFormAppConfig();
+
+const sections = RDMBasicSections;
+
+ReactDOM.render(
+  <DepositFormApp
+    config={config}
+    {...rest}
+    sections={sections}
+    useWizardForm
+  />,
+  rootEl,
+);

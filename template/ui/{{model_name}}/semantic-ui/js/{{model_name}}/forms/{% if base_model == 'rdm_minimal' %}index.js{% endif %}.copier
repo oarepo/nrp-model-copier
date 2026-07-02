@@ -1,0 +1,23 @@
+import { DepositFormApp, parseFormAppConfig } from "@js/oarepo_ui/forms";
+import { RDMMinimalSections, RDMMinimalRecordSerializer } from "@js/oarepo_rdm/form";
+import React from "react";
+import ReactDOM from "react-dom";
+
+const { rootEl, config, ...rest } = parseFormAppConfig();
+const recordSerializer = new RDMMinimalRecordSerializer(
+  config.default_locale,
+  config.custom_fields.vocabularies,
+);
+
+const sections = RDMMinimalSections;
+
+ReactDOM.render(
+  <DepositFormApp
+    config={config}
+    {...rest}
+    sections={sections}
+    recordSerializer={recordSerializer}
+    useWizardForm
+  />,
+  rootEl,
+);

@@ -1,0 +1,48 @@
+{% extends config.BASE_TEMPLATE %}
+
+{%- block css %}
+  {{ super() }}
+  {% include model_name ~ "/record_detail/css.html" ignore missing %}
+{%- endblock css %}
+
+{% block head_meta %}
+  {{ super() }}
+  {% include model_name ~ "/record_detail/head_meta.html" ignore missing %}
+{% endblock head_meta %}
+
+{%- block page_body %}
+<div class="ui container">
+<div class="ui relaxed grid mt-5">
+  <div class="two column row top-padded">
+    <article class="sixteen wide tablet eleven wide computer column main-record-content">
+      {%- block record_body -%}
+        {%- include model_name ~ "/record_detail/main.html" -%}
+      {%- endblock record_body -%}
+    </article>
+    <aside class="sixteen wide tablet five wide computer column sidebar">
+      {%- block record_sidebar %}
+        {%- include [model_name ~ "/record_detail/record_sidebar.html", model_type ~ "/record_detail/record_sidebar.html", "oarepo_ui/record_detail/side_bar/record_sidebar.html"] ignore missing -%}
+      {%- endblock record_sidebar %}
+    </aside>
+  </div>
+</div>
+</div>
+{%- endblock page_body %}
+
+{%- block javascript %}
+  {% if use_theme_basic_template|default(true) %}
+    {{ super() }}
+  {% else %}
+    {% include config.THEME_JAVASCRIPT_TEMPLATE %}
+  {% endif %}
+  {%- block record_jsonld %}
+    {% set jsonld_serialization = record_ui | transform_record('SchemaorgJSONLDSerializer', throws=False) %}
+    {%- if jsonld_serialization %}
+      <script type='application/ld+json'>{{ jsonld_serialization | tojson }}</script>
+    {%- endif %}
+  {%- endblock record_jsonld %}
+
+  {{ webpack['invenio-app-rdm-landing-page-theme.js'] }}
+  {{ webpack['invenio-app-rdm-landing-page.js'] }}
+  {{ webpack['previewer_theme.js'] }}
+{%- endblock javascript %}
