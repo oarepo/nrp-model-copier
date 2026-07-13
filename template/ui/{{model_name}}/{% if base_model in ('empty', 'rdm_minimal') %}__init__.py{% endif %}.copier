@@ -5,14 +5,18 @@ from oarepo_ui.resources.components import (
     PermissionsComponent,
 {% if base_model == 'rdm_minimal' %}
     CustomFieldsComponent,
-    EmptyRecordAccessComponent,
     FilesLockedComponent,
     FilesQuotaAndTransferComponent,
     RecordRestrictionComponent,
 {% endif %}
 )
 {% if base_model == 'rdm_minimal' or base_model == 'empty' %}
-from oarepo_rdm.ui.components import FilesEnabledComponent
+from oarepo_rdm.ui.components import (
+    FilesEnabledComponent,
+{% if base_model == 'rdm_minimal' %}
+    RestrictedFromCommunityComponent,
+{% endif %}
+)
 {% endif %}
 from oarepo_ui.resources.records.config import RecordsUIResourceConfig
 from oarepo_ui.resources.records.resource import RecordsUIResource
@@ -44,7 +48,7 @@ class {{resource_config}}(RecordsUIResourceConfig):
         FilesEnabledComponent,
         CustomFieldsComponent,
         RecordRestrictionComponent,
-        EmptyRecordAccessComponent,
+        RestrictedFromCommunityComponent,
         FilesLockedComponent,
         FilesQuotaAndTransferComponent,
     ]
