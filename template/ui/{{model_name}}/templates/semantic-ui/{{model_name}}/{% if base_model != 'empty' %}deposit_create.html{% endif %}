@@ -14,4 +14,10 @@
    To customize, create/edit these partials (they extend oarepo_ui defaults):
    - deposit_create/form.html - Custom form container layout
    - deposit_create/javascript.html - Custom JavaScript includes (optional)
+
+   To add custom CSS, override the CSS block by adding the following block to this file:
+   {%- block css %}
+     {{ super() }}
+     {{ webpack['stylesheet.css'] }}
+   {%- endblock css %}
 #}
