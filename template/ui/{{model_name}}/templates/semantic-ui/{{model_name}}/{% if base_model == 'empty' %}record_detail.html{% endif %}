@@ -21,7 +21,7 @@
     </article>
     <aside class="sixteen wide tablet five wide computer column sidebar">
       {%- block record_sidebar %}
-        {%- include [model_name ~ "/record_detail/record_sidebar.html", model_type ~ "/record_detail/record_sidebar.html", "oarepo_ui/record_detail/side_bar/record_sidebar.html"] ignore missing -%}
+        {%- include [model_name ~ "/record_detail/record_sidebar.html", "oarepo_ui/record_detail/side_bar/record_sidebar.html"] ignore missing -%}
       {%- endblock record_sidebar %}
     </aside>
   </div>
