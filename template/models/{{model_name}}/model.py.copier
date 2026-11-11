@@ -19,6 +19,11 @@ from ccmm_invenio.models import ccmm_production_preset_1_1_0
 from oarepo_model.presets.records_resources import records_resources_preset
 from oarepo_model.presets.ui_links import ui_links_preset
 {%- endif %}
+{%- if base_model != "empty" %}
+from oarepo_communities.model.presets import communities_preset
+from oarepo_requests.model.presets.requests import requests_preset
+from oarepo_workflows.model.presets import workflows_preset
+{%- endif %}
 
 from .serializers import DataCiteJSONSerializer
 
@@ -30,16 +35,23 @@ from .serializers import DataCiteJSONSerializer
     description={{ model_description|tojson }},
     presets=[
 {% if base_model == "rdm_complete" %}
-        rdm_complete_preset
+        rdm_complete_preset,
 {% elif base_model == "rdm_basic" %}
-        rdm_basic_preset
+        rdm_basic_preset,
 {% elif base_model == "rdm_minimal" %}
-        rdm_minimal_preset
+        rdm_minimal_preset,
 {% elif base_model == "ccmm" %}
-        ccmm_production_preset_1_1_0
+        ccmm_production_preset_1_1_0,
 {% elif base_model == "empty" %}
         records_resources_preset,
         ui_links_preset,
+{% endif %}
+{% if base_model != "empty" %}
+        # NRP workflows (configure_workflows in invenio.cfg), oarepo-requests
+        # (publish/edit/delete requests) and community membership of records
+        workflows_preset,
+        requests_preset,
+        communities_preset,
 {% endif %}
     ],
     types=[
