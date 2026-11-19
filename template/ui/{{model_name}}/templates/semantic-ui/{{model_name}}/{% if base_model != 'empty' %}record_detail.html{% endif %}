@@ -1,6 +1,6 @@
 {% extends "oarepo_ui/record_detail.html" %}
 
-{# Base template for {{model_name}} record detail page.
+{# Base template for the record detail page.
    Extended by oarepo_ui.pages.RecordDetail JinjaX component.
 
    Template inheritance chain:

@@ -1,6 +1,6 @@
 {% extends "oarepo_ui/deposit_create.html" %}
 
-{# Base template for {{model_name}} deposit create page.
+{# Base template for the deposit create page.
    Extended by oarepo_ui.pages.DepositCreate JinjaX component.
 
    Template inheritance chain:
