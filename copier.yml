@@ -73,4 +73,5 @@ _tasks:
     - "{{ _copier_python }}"
     - "{{ _copier_conf.src_path }}/extensions/register_to_invenio_cfg.py"
     - "{{model_name}}"
+    - "{{base_model}}"
     when: "{{ _copier_operation == 'copy' }}"
