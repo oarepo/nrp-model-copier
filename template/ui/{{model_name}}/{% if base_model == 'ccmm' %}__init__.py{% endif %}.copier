@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from ccmm_invenio.ui.config import CCMMRecordsUIResourceConfig
 from ccmm_invenio.ui.resource import CCMMRecordsUIResource
 from oarepo_ui.utils import can_view_deposit_page
@@ -6,6 +10,9 @@ from invenio_i18n import lazy_gettext as _
 from oarepo_ui.overrides import UIComponent
 from oarepo_ui.overrides.components import UIComponentImportMode
 from oarepo_ui.proxies import current_oarepo_ui
+
+if TYPE_CHECKING:
+    from flask import Blueprint, Flask
 
 
 class {{resource_config}}(CCMMRecordsUIResourceConfig):
@@ -29,7 +36,7 @@ class {{resource_config}}(CCMMRecordsUIResourceConfig):
 class {{resource}}(CCMMRecordsUIResource):
     pass
 
-def ui_overrides(app):
+def ui_overrides(_app: Flask) -> None:
     """Register UI overrides."""
     ui_resource_config = {{resource_config}}()
 
@@ -44,24 +51,25 @@ def ui_overrides(app):
         )
 
 
-def init_menu(app):
+def init_menu(app: Flask) -> None:
     """Initialize menu before first request."""
     ui_resource_config = {{resource_config}}()
 
     with app.app_context():
         current_menu.submenu("plus.create_{{model_name}}").register(
             f"{ui_resource_config.blueprint_name}.deposit_create",
-            _("New {{model_human_name}}"),
+            _("Upload {{model_human_name}}"),
+            icon="upload",
             order=1,
             visible_when=can_view_deposit_page,
         )
 
-def finalize_app(app):
-    """Finalize app"""
+def finalize_app(app: Flask) -> None:
+    """Finalize app."""
     init_menu(app)
     ui_overrides(app)
 
-def create_blueprint(app):
+def create_blueprint(_app: Flask) -> Blueprint:
     """Register blueprint for this resource."""
     blueprint = {{resource}}({{resource_config}}()).as_blueprint()
     return blueprint
