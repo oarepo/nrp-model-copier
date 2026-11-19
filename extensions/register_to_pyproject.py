@@ -3,19 +3,32 @@
 import re
 import sys
 
-import tomli
-import tomli_w
+try:
+    # tomlkit preserves comments and formatting of the user's pyproject.toml
+    import tomlkit
+except ImportError:  # fallback for environments without tomlkit (comments are lost)
+    tomlkit = None
+    import tomli
+    import tomli_w
 
 
 class PyProject:
     def __init__(self, path):
         self.pyproject_file = path
-        with open(self.pyproject_file, "rb") as f:
-            self.pyproject_data = tomli.load(f)
+        if tomlkit:
+            with open(self.pyproject_file, "r", encoding="utf-8") as f:
+                self.pyproject_data = tomlkit.load(f)
+        else:
+            with open(self.pyproject_file, "rb") as f:
+                self.pyproject_data = tomli.load(f)
 
     def save(self):
-        with open(self.pyproject_file, "wb") as f:
-            tomli_w.dump(self.pyproject_data, f)
+        if tomlkit:
+            with open(self.pyproject_file, "w", encoding="utf-8") as f:
+                tomlkit.dump(self.pyproject_data, f)
+        else:
+            with open(self.pyproject_file, "wb") as f:
+                tomli_w.dump(self.pyproject_data, f)
 
     def add_dependencies(self, *dependencies):
         self.update_dependencies_array(
@@ -37,8 +50,15 @@ class PyProject:
             "entry-points", {}
         )
 
-        ep_group = toml_entry_points.setdefault(group, {})
-        ep_group[name] = value
+        if group in toml_entry_points:
+            toml_entry_points[group][name] = value
+        elif tomlkit:
+            ep_group = tomlkit.table()
+            ep_group[name] = value
+            ep_group.add(tomlkit.nl())  # blank line before the next table
+            toml_entry_points[group] = ep_group
+        else:
+            toml_entry_points[group] = {name: value}
         return self
 
     def update_dependencies_array(self, target_array, new_values):
