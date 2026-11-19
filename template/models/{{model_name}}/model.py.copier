@@ -5,7 +5,9 @@ from __future__ import annotations
 
 from invenio_i18n import lazy_gettext as _
 from oarepo_model.api import model
+{% if base_model != "ccmm" -%}
 from oarepo_model.customizations import AddMetadataExport
+{% endif -%}
 from oarepo_model.datatypes.registry import from_yaml
 {% if base_model == "rdm_complete" -%}
 from oarepo_rdm.model.presets import rdm_complete_preset
@@ -24,8 +26,10 @@ from oarepo_communities.model.presets import communities_preset
 from oarepo_requests.model.presets.requests import requests_preset
 from oarepo_workflows.model.presets import workflows_preset
 {%- endif %}
+{%- if base_model != "ccmm" %}
 
 from .serializers import DataCiteJSONSerializer
+{%- endif %}
 
 # TODO: Consider letting users add an image/icon for the model,
 # so that the deposit model selection page is more visually appealing.
@@ -66,6 +70,8 @@ from .serializers import DataCiteJSONSerializer
         # specify the keyword "Invenio repository development" inside the subject or
         # mail body of the request.
 
+{%- if base_model != "ccmm" %}
+
         # export for datacite
         AddMetadataExport(
             code="datacite",
@@ -73,6 +79,7 @@ from .serializers import DataCiteJSONSerializer
             mimetype="application/vnd.datacite.datacite+json",
             serializer=DataCiteJSONSerializer()
         ),
+{%- endif %}
     ],
     configuration={
         "ui_blueprint_name": "{{model_name}}_ui"
