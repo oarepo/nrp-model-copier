@@ -1,6 +1,6 @@
 {% extends "oarepo_ui/record_search.html" %}
 
-{# Base template for {{model_name}} search page.
+{# Base template for the search page.
    Extended by oarepo_ui.pages.RecordSearch JinjaX component.
 
    Template inheritance chain:
