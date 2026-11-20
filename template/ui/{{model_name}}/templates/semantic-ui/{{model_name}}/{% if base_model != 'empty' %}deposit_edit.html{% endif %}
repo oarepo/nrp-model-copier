@@ -13,11 +13,6 @@
 
    To customize, create/edit these partials (they extend oarepo_ui defaults):
    - deposit_edit/form.html - Custom form container layout
+   - deposit_edit/css.html - Custom CSS includes (optional)
    - deposit_edit/javascript.html - Custom JavaScript includes (optional)
 #}
-
-{# ccmm-invenio styles for the locations field (map) in the deposit form #}
-{%- block css %}
-  {{ super() }}
-  {{ webpack['ccmm_invenio_forms_locations_css.css'] }}
-{%- endblock css %}
