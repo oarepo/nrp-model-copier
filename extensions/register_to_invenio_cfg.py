@@ -4,6 +4,7 @@ SIDEBAR_BOXES = {
     "empty": ["export", "citations", "technical_metadata"],
     "rdm_basic": ["manage_menu", "communities", "export", "citations", "technical_metadata"],
     "rdm_minimal": ["manage_menu", "communities", "export", "citations", "technical_metadata"],
+    # "ccmm" is the default, no modifications here
 }
 
 
